@@ -28,13 +28,17 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 	{
 		inventory.GET("/:product_id", inventoryController.GetInventoryByProductID)
 		inventory.PUT("/:product_id", inventoryController.UpdateStock)
+		inventory.DELETE("/:product_id", inventoryController.DeleteInventory)
+
 		inventory.POST("/", inventoryController.CreateInventory)
 	}
 
-	orders := r.Group("/orders")
+	order := r.Group("/orders")
 	{
-		orders.POST("/", orderController.CreateOrder)
-		orders.GET("/:id", orderController.GetOrderByID)
+		order.POST("/", orderController.CreateOrder)
+		order.GET("/:id", orderController.GetOrderByID)
+		order.PUT("/:id", orderController.UpdateOrder)
+		order.DELETE("/:id", orderController.DeleteOrder)
 	}
 
 }

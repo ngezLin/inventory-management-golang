@@ -57,3 +57,51 @@ func (o *OrderController) GetOrderByID(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"data": order})
 }
+
+func (o *OrderController) UpdateOrder(ctx *gin.Context) {
+	id := ctx.Param("id")
+	var order models.Order
+
+	if err := o.DB.First(&order, id).Error; err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "Order not found"})
+		return
+	}
+
+	var input struct {
+		ProductID uint   `json:"product_id"`
+		Quantity  int    `json:"quantity"`
+		OrderDate string `json:"order_date"`
+	}
+
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	order.ProductID = input.ProductID
+	order.Quantity = input.Quantity
+
+	if err := o.DB.Save(&order).Error; err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update order"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"data": order})
+}
+
+func (o *OrderController) DeleteOrder(ctx *gin.Context) {
+	id := ctx.Param("id")
+
+	var order models.Order
+	if err := o.DB.First(&order, id).Error; err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "Order not found"})
+		return
+	}
+
+	if err := o.DB.Delete(&order).Error; err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete order"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "Order deleted successfully"})
+}

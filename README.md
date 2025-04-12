@@ -160,7 +160,33 @@ Hasil
     }
 }
 
-11. Membuat Order
+11. Delete Inventory
+DELETE http://localhost:8080/inventory/1
+
+Hasil
+{
+    "message": "Inventory deleted successfully"
+}
+
+12. Update Inventory
+PUT http://localhost:8080/inventory/1
+{
+  "product_id": 1,
+  "quantity": 110,
+  "location": "Gudang A"
+}
+
+Hasil
+{
+    "data": {
+        "ID": 2,
+        "ProductID": 1,
+        "Quantity": 110,
+        "Location": "Gudang A"
+    }
+}
+
+13. Membuat Order
 POST http://localhost:8080/orders
 {
   "product_id": 1,
@@ -191,7 +217,7 @@ Hasil
     }
 }
 
-12. Melihat order berdasarkan order id
+14. Melihat order berdasarkan order id
 GET http://localhost:8080/orders/1
 
 Hasil
@@ -217,6 +243,46 @@ Hasil
         }
     }
 }
+
+15. Delete order by id
+DELETE http://localhost:8080/orders/1
+
+Hasil
+{
+    "message": "Order deleted successfully"
+}
+
+16. Update order by id
+PUT http://localhost:8080/orders/2
+{
+  "product_id": 3,
+  "quantity": 10
+}
+
+Hasil
+{
+    "data": {
+        "ID": 2,
+        "CreatedAt": "2025-04-13T00:15:12.615+08:00",
+        "UpdatedAt": "2025-04-13T00:22:09.891+08:00",
+        "DeletedAt": null,
+        "product_id": 3,
+        "quantity": 10,
+        "order_date": "2025-04-13T00:15:12.615+08:00",
+        "Product": {
+            "ID": 0,
+            "CreatedAt": "0001-01-01T00:00:00Z",
+            "UpdatedAt": "0001-01-01T00:00:00Z",
+            "DeletedAt": null,
+            "name": "",
+            "description": "",
+            "price": 0,
+            "category": "",
+            "image_url": ""
+        }
+    }
+}
+
 
 link postman
 https://api122-5422.postman.co/workspace/Dibimbing~b3b8789f-1523-4763-b10f-6c86b392f45d/collection/40938914-4a913581-f5ec-41b8-9317-4288c2faffc2?action=share&creator=40938914

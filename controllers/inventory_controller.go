@@ -82,3 +82,24 @@ func (c *InventoryController) CreateInventory(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusCreated, gin.H{"data": inventory})
 }
+
+func (c *InventoryController) DeleteInventory(ctx *gin.Context) {
+	id, err := strconv.Atoi(ctx.Param("product_id"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid product ID"})
+		return
+	}
+
+	var inventory models.Inventory
+	if err := c.DB.Where("product_id = ?", id).First(&inventory).Error; err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "Inventory not found"})
+		return
+	}
+
+	if err := c.DB.Delete(&inventory).Error; err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete inventory"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "Inventory deleted successfully"})
+}
