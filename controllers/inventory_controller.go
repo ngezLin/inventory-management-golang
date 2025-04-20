@@ -17,6 +17,32 @@ func NewInventoryController(db *gorm.DB) *InventoryController {
 	return &InventoryController{DB: db}
 }
 
+func (c *InventoryController) CreateInventory(ctx *gin.Context) {
+	var input struct {
+		ProductID uint   `json:"product_id"`
+		Quantity  int    `json:"quantity"`
+		Location  string `json:"location"`
+	}
+
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	inventory := models.Inventory{
+		ProductID: input.ProductID,
+		Quantity:  input.Quantity,
+		Location:  input.Location,
+	}
+
+	if err := c.DB.Create(&inventory).Error; err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create inventory"})
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, gin.H{"data": inventory})
+}
+
 func (c *InventoryController) GetInventoryByProductID(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.Param("product_id"))
 	var inventory models.Inventory
@@ -55,32 +81,6 @@ func (c *InventoryController) UpdateStock(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"data": inventory})
-}
-
-func (c *InventoryController) CreateInventory(ctx *gin.Context) {
-	var input struct {
-		ProductID uint   `json:"product_id"`
-		Quantity  int    `json:"quantity"`
-		Location  string `json:"location"`
-	}
-
-	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
-		return
-	}
-
-	inventory := models.Inventory{
-		ProductID: input.ProductID,
-		Quantity:  input.Quantity,
-		Location:  input.Location,
-	}
-
-	if err := c.DB.Create(&inventory).Error; err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create inventory"})
-		return
-	}
-
-	ctx.JSON(http.StatusCreated, gin.H{"data": inventory})
 }
 
 func (c *InventoryController) DeleteInventory(ctx *gin.Context) {

@@ -283,6 +283,23 @@ Hasil
     }
 }
 
+Assignment Day 26 - File Handling and Storage API
+POST http://localhost:8080/products/1/image
+key: image
+Value: file
+Hasil
+
+{
+    "image_url": "/uploads/1_download.jpeg",
+    "message": "Image uploaded successfully"
+}
+
+Cek URL gambar
+GET http://localhost:8080/products/1/image
+
+Download gambar
+http://localhost:8080/uploads/1_download.jpeg
+
 
 link postman
 https://api122-5422.postman.co/workspace/Dibimbing~b3b8789f-1523-4763-b10f-6c86b392f45d/collection/40938914-4a913581-f5ec-41b8-9317-4288c2faffc2?action=share&creator=40938914

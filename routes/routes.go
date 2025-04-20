@@ -20,6 +20,7 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 		products.POST("/", productController.CreateProduct)
 		products.PUT("/:id", productController.UpdateProduct)
 		products.DELETE("/:id", productController.DeleteProduct)
+
 		products.POST("/:id/image", productController.UploadImage)
 		products.GET("/:id/image", productController.GetImageByProductID)
 	}
@@ -29,7 +30,6 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 		inventory.GET("/:product_id", inventoryController.GetInventoryByProductID)
 		inventory.PUT("/:product_id", inventoryController.UpdateStock)
 		inventory.DELETE("/:product_id", inventoryController.DeleteInventory)
-
 		inventory.POST("/", inventoryController.CreateInventory)
 	}
 
@@ -40,5 +40,4 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 		order.PUT("/:id", orderController.UpdateOrder)
 		order.DELETE("/:id", orderController.DeleteOrder)
 	}
-
 }
